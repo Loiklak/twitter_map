@@ -33,3 +33,7 @@ const Tweet = sequelize.define('tweet',{
 
 //We connect the models to the database
 sequelize.sync();
+
+module.exports = {
+    Tweet
+}
