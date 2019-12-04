@@ -4,15 +4,13 @@ Run `yarn install`
 
 ## Config.js template
 ```
-const config = {
-"database": {
+const db = {
     "database": "",
     "username": "",
     "password": "",
     "host": "",
     "dialect": ""
-}
 };
 
-module.exports(config);
+exports.db = db;
 ```
