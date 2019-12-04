@@ -5,13 +5,20 @@
 
 ## Config.js template
 ```
-const db = {
-    "database": "",
-    "username": "",
-    "password": "",
-    "host": "",
-    "dialect": ""
-};
+module.exports = {
+    db: {
+        "database": "twitter",
+        "username": "twitter",
+        "password": "password",
+        "host": "localhost",
+        "dialect": "mysql"
+    },
 
-exports.db = db;
+    twitterCred: {
+        "consumer_key": "",
+        "consumer_secret": "",
+        "access_token": "",
+        "access_token_secret": ""
+    }
+};
 ```
