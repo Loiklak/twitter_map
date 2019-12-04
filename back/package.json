@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mysql2": "^2.0.1",
-    "sequelize": "^5.21.2"
+    "sequelize": "^5.21.2",
+    "twit": "^2.2.11"
   }
 }
