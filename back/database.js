@@ -1,8 +1,6 @@
 const Sequelize = require('sequelize');
 const config = require('./config')
 
-
-console.log(config.db);
 //Connection to the database (Sequelize handles everything)
 const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
     host: config.db.host,
@@ -16,7 +14,6 @@ const sequelize = new Sequelize(config.db.database, config.db.username, config.d
 });
 
 //Verify connection
-
 sequelize
     .authenticate()
     .then(() => {
@@ -25,4 +22,14 @@ sequelize
     .catch((e) => {
         console.log("Can't connect to the database : ", e);
     })
-        .then(sequelize.close())
+
+//Define schema of the model
+const Tweet = sequelize.define('tweet',{
+    data: {
+        type: Sequelize.STRING
+    }
+}
+)
+
+//We connect the models to the database
+sequelize.sync();
