@@ -25,11 +25,9 @@ sequelize
 
 //Define schema of the model
 const Tweet = sequelize.define('tweet',{
-    data: {
-        id: Sequelize.BIGINT,
-        date: Sequelize.DATE,
-        location: Sequelize.STRING
-    }
+    tweetId: Sequelize.BIGINT,
+    date: Sequelize.DATE,
+    location: Sequelize.STRING
 }
 )
 
