@@ -27,7 +27,8 @@ sequelize
 const Tweet = sequelize.define('tweet',{
     tweetId: Sequelize.BIGINT,
     date: Sequelize.DATE,
-    location: Sequelize.STRING
+    location: Sequelize.STRING,
+    hashtag: Sequelize.STRING
 }
 )
 
