@@ -58,6 +58,3 @@ function shortPoll(hashtag, lastTweetId=0) {
         }
     }
 }
-
-shortPoll("DonaldTrump")
-shortPoll("greve")

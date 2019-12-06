@@ -8,6 +8,10 @@ const T  = new Twit({
     access_token_secret: config.twitterCred.access_token_secret
 });
 
+
+/**
+ * Vérifie la validité des credentials Twitter
+ */
 function check_connection () {
     //Vérifier la validité des credentials
     T.get('account/verify_credentials', { skip_status: true })
@@ -19,14 +23,15 @@ function check_connection () {
     });
 };
 
-/*Permet de récupérer les tweets associé au hashtag.
-    [Arg] Callback : Mettre dedans la fonction qui va mettre les tweets dans la BDD
-    [OPTIONAL] Tweets seulement après le last_tweet_id (le dernier tweet en base de donnée typiquement)
-    Renvoie un array avec dedans les JSON de chaque tweet
-    Les infos utiles sont : (où tweet est un object de data.statuses)
+/** Permet de récupérer les tweets associé au hashtag.
+    * Renvoie un array avec dedans les JSON de chaque tweet
+    * Les infos utiles sont : (où tweet est un object de data.statuses)
     * tweet.id (pour savoir quel est le dernier tweet que l'on a reçu)
     * tweet.statuses.created_at (la date)
     * tweet.statuses.user.location (pour la localisation du tweet)
+    * @param {string} hashtag - Hashtag donc on veut les résultats associés
+    * @param {int} last_tweet_id - ID du Tweet à partir duquel (exlclus) on veut récupérer des résultats
+    * @param {function} callback - Fonction qui recevoir en argument les résultats de la recherche (un array)
     */
 function search (hashtag, last_tweet_id=0, callback=(err, data, response)=>console.log(data)) {
     T.get('search/tweets', { q: `#${hashtag}`, count: 100, since_id: last_tweet_id}, callback)
