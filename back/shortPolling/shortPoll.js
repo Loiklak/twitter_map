@@ -1,6 +1,11 @@
 const db = require("../database");
 const tweeter = require("./tweeter_api");
 
+/**
+ * Fonction qui récupére les tweets depuis l'API Twitter et les met en base si ils ont une localisation
+ * @param {string} hashtag - Hashtag dont on veut faire la recherche
+ * @param {int} lastTweetId - Dernier ID du tweet en base (pour ne récupérer que les tweets plus vieux)
+ */
 function shortPoll(hashtag, lastTweetId=0) {
     tweeter.search(hashtag, lastTweetId, scrapAndInsert);
 
