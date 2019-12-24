@@ -8,7 +8,7 @@ server = app.listen(5000, () => {
     console.log('Server is on !')
 });
 
-const hashtag = "SchoolDays";
+const hashtag = "greve";
 
 const io = require('socket.io')(server);
 

@@ -25,27 +25,33 @@ function poll(hashtag, lastTweetId, sendTweet) {
             }));
 
             formated.map((tweet) => {if(tweet.location != '') {
-                getLoc(tweet.location)
-                    .then((response => {
-                        console.log(response.data)
-                        if (!response.data.error) {
-                            coord = [response.data[0].lon, response.data[0].lat]
-                            db.Tweet.create({
-                                tweetId: tweet.id,
-                                date: tweet.date,
-                                location: {type: 'Point', coordinates: coord},
-                                hashtag: hashtag
-                            }).catch(e => console.log(e.data.error))
-                            console.log(tweet.id);
-                            sendTweet({type: 'Point', coordinates: coord});
+                //On regarde si le tweet existe déjà en base
+                db.Tweet.count({where: { tweetId: tweet.id } })
+                    .then(count => {
+                        if (count===0) { //Si il n'existe pas on essaie de l'ajouter
+                            console.log('Count :', count)
+                            console.log('ID :', tweet.id);
+                            getLoc(tweet.location)
+                                .then((response => {
+                                    console.log(response.data);
+                                    if (!response.data.error) {
+                                        coord = [response.data[0].lon, response.data[0].lat];
+                                        db.Tweet.create({
+                                            tweetId: tweet.id,
+                                            date: tweet.date,
+                                            location: {type: 'Point', coordinates: coord},
+                                            hashtag: hashtag
+                                        })
+                                        .catch(e => console.log(e.data.error));
+                                        console.log(tweet.id);
+                                        sendTweet({type: 'Point', coordinates: coord});
+                                    }
+                            }))
+                            .catch(e => {console.log(e)});
                         }
-                }))
-                .catch(e => {
-                    console.log(e);
-                })
-            }
-            }
-            );
+                    });
+                
+            } });
         }
     }
 
