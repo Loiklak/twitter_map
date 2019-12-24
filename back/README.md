@@ -22,7 +22,7 @@ module.exports = {
     },
 
     locationIQ: {
-        "token": "b9d92d366db3df"
+        "token": ""
     }
 };
 ```
