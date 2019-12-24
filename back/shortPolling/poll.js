@@ -39,11 +39,11 @@ function poll(hashtag, lastTweetId, sendTweet) {
                                             location: {type: 'Point', coordinates: coord},
                                             hashtag: hashtag
                                         })
-                                        .catch(e => console.log(e.data.error));
+                                        .catch(e => console.log(e));
                                         sendTweet({type: 'Point', coordinates: coord});
                                     }
                             }))
-                            .catch(e => {console.log(e)});
+                            .catch(e => {console.log(e.data.error)});
                         }
                     });
                 
