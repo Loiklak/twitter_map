@@ -23,17 +23,23 @@ function poll(hashtag, lastTweetId, sendTweet) {
                 }
             }));
 
+            let longitude=0, latitude = 0;
             formated.map((tweet) => {//if(tweet.location != '') {
+            //On génère des coordinates aléatoires
+            longitude = Math.floor(361*Math.random())-180;
+            latitude = Math.floor(181*Math.random())-90;
             db.Tweet.create({
                 tweetId: tweet.id,
                 date: tweet.date,
-                location: tweet.location,
+                //location: tweet.location,
+                location: {type: 'Point', coordinates: [longitude, latitude]},
                 hashtag: hashtag
             })
             .catch(e => {});
             console.log(tweet.id);
-            sendTweet(tweet.location)
             //.catch((e) => console.log("Error while inserting :", e));
+            //sendTweet(tweet.location);
+            sendTweet({type: 'Point', coordinates: [longitude, latitude]});
             }
             //}
             );

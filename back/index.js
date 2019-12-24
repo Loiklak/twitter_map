@@ -8,7 +8,7 @@ server = app.listen(5000, () => {
     console.log('Server is on !')
 });
 
-const hashtag = "CDTV";
+const hashtag = "SchoolDays";
 
 const io = require('socket.io')(server);
 
@@ -20,6 +20,8 @@ io.on('connection', function(socket) {
     }).then(results => socket.emit('tweetsList', results));
 })
 
+// io.on('connection', (socket) => socket.emit('tweetsList', ['ok', 'ok', 'supelec est la']))
+
 const sendTweet = function(message) {
     io.emit("newTweet", message)
     console.log('SENT')
@@ -28,5 +30,12 @@ const sendTweet = function(message) {
 const loopingFunction = function ( ) {
     shortPoll(hashtag, sendTweet)
 }
-//Shortpolling vers l'API Twitter toutes les deux secondes
-setInterval(loopingFunction, 2002);
+//Shortpolling vers l'API Twitter toutes les 5 secondes
+setInterval(loopingFunction, 5000);
+
+/*const test = () => {
+    io.emit('newTweet', {type: 'Point', coordinates: [0, 0]})
+    console.log('SENT')
+}
+
+setInterval(test, 2000);*/
