@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SocketService } from '../services/socket.service';
 
 @Component({
@@ -8,16 +8,27 @@ import { SocketService } from '../services/socket.service';
 })
 export class TopbarComponent implements OnInit {
 
-  //Il faudra récupérer le hashtag à la connexion à la socket 
   hashtag:string;
+  date:string;
 
+  onLoadDate(){
+    this.socketService.sendDate(this.date)
+    this.socketService.loading = true;
+  }
+  
   constructor(private socketService: SocketService) {}
 
   ngOnInit() {
 
     this.socketService
       .getHashtag()
-      .subscribe(hashtag => this.hashtag = hashtag);
+      .subscribe(hashtag => {this.hashtag = hashtag;});
+
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+      this.date= yyyy+"-"+mm+"-"+dd;
   }
 
 }

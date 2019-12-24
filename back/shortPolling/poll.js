@@ -29,11 +29,8 @@ function poll(hashtag, lastTweetId, sendTweet) {
                 db.Tweet.count({where: { tweetId: tweet.id } })
                     .then(count => {
                         if (count===0) { //Si il n'existe pas on essaie de l'ajouter
-                            console.log('Count :', count)
-                            console.log('ID :', tweet.id);
                             getLoc(tweet.location)
                                 .then((response => {
-                                    console.log(response.data);
                                     if (!response.data.error) {
                                         coord = [response.data[0].lon, response.data[0].lat];
                                         db.Tweet.create({
@@ -43,7 +40,6 @@ function poll(hashtag, lastTweetId, sendTweet) {
                                             hashtag: hashtag
                                         })
                                         .catch(e => console.log(e.data.error));
-                                        console.log(tweet.id);
                                         sendTweet({type: 'Point', coordinates: coord});
                                     }
                             }))

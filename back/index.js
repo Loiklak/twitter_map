@@ -1,6 +1,8 @@
 const express = require('express');
 const { shortPoll } = require("./shortPolling/shortPoll");
 const db = require('./database');
+const moment = require('moment');
+const { Op } = require('sequelize');
 
 const app = express();
 
@@ -18,14 +20,23 @@ io.on('connection', function(socket) {
         attributes: ['location'],
         raw: true
     }).then(results => socket.emit('tweetsList', results));
-    socket.emit('hashtag', hashtag);
-})
 
-// io.on('connection', (socket) => socket.emit('tweetsList', ['ok', 'ok', 'supelec est la']))
+    socket.emit('hashtag', hashtag);
+
+    socket.on('fromDate', function(newDate) {
+        db.Tweet.findAll({
+            where: { date: { [Op.gte]: moment(newDate).toDate() } },
+            attributes: ['location'],
+            raw: true
+        })
+        .then((results) => {
+            socket.emit('tweetsList', results)
+        })
+    })
+})
 
 const sendTweet = function(message) {
     io.emit("newTweet", message)
-    console.log('SENT')
 }
 
 const loopingFunction = function ( ) {
@@ -33,10 +44,3 @@ const loopingFunction = function ( ) {
 }
 //Shortpolling vers l'API Twitter toutes les 5 secondes
 setInterval(loopingFunction, 5000);
-
-/*const test = () => {
-    io.emit('newTweet', {type: 'Point', coordinates: [0, 0]})
-    console.log('SENT')
-}
-
-setInterval(test, 2000);*/

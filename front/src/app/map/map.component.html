@@ -3,10 +3,10 @@
     [zoom]="[1]"
     [center]="[-103.59179687498357, 40.66995747013945]"
   >
-    <ng-container *ngIf="earthquakes"> <!--On affiche le container que si les données ont été chargées-->
+    <ng-container *ngIf="tweets"> <!--On affiche le container que si les données ont été chargées-->
       <!--La "source" qui va fournir la data aux layers-->
       <mgl-geojson-source
-        id="earthquakes"
+        id="tweets"
         [data]="tweets"
         [cluster]="true"
         [clusterMaxZoom]="14"
@@ -19,7 +19,7 @@
       <mgl-layer
         id="clusters"
         type="circle"
-        source="earthquakes"
+        source="tweets"
         [filter]="['has', 'point_count']"
         [paint]="{
           'circle-color': {
@@ -46,7 +46,7 @@
       <mgl-layer
         id="cluster-count"
         type="symbol"
-        source="earthquakes"
+        source="tweets"
         [filter]="['has', 'point_count']"
         [layout]="{
           'text-field': '{point_count_abbreviated}',
@@ -58,7 +58,7 @@
       <mgl-layer
         id="unclustered-point"
         type="circle"
-        source="earthquakes"
+        source="tweets"
         [filter]="['!has', 'point_count']"
         [paint]="{
           'circle-color': '#11b4da',

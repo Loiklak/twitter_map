@@ -10,8 +10,6 @@ export class MapComponent implements OnInit {
 
   constructor(private socketService: SocketService){}
 
-  earthquakes: object;
-
   tweets = {
     "type": "FeatureCollection",                                                                 
     "features": []
@@ -23,11 +21,16 @@ export class MapComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.earthquakes = await import('./earthquake.json');
+
+    this.socketService.loading = true;
     
     this.socketService
       .getTweets()
-      .subscribe(array => this.tweets.features = array.map(object=>this.loc2feature(object.location)));
+      .subscribe(array => {
+        this.tweets.features = array.map(object=>this.loc2feature(object.location));
+        this.tweets = { ...this.tweets }
+        this.socketService.loading = false;
+      });
 
     this.socketService
       .getNewTweets()

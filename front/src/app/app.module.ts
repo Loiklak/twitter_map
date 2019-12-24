@@ -6,6 +6,7 @@ import { TopbarComponent } from './topbar/topbar.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { MapComponent } from './map/map.component';
+import { FormsModule } from '@angular/forms';
  
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -21,7 +22,8 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     SocketIoModule.forRoot(config),
     NgxMapboxGLModule.withConfig({
       accessToken: 'pk.eyJ1Ijoid3lra3NzIiwiYSI6ImNqMjR6aTdmdzAwNHMzMnBvbjBucjlqNm8ifQ.6GjGpofWBVaIuSnhdXQb5w'
-    })
+    }),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
