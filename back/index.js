@@ -1,11 +1,32 @@
 const express = require('express');
-const { poll } = require("./shortPolling/poll")
+const { shortPoll } = require("./shortPolling/shortPoll");
+const db = require('./database');
 
 const app = express();
-
-//Shortpolling vers l'API Twitter toutes les deux secondes
-setInterval(poll, 2002);
 
 server = app.listen(5000, () => {
     console.log('Server is on !')
 });
+
+const hashtag = "CDTV";
+
+const io = require('socket.io')(server);
+
+// Envoie la liste de tweets en BDD quand le client se connecte
+io.on('connection', function(socket) {
+    db.Tweet.findAll({
+        attributes: ['location'],
+        raw: true
+    }).then(results => socket.emit('tweetsList', results));
+})
+
+const sendTweet = function(message) {
+    io.emit("newTweet", message)
+    console.log('SENT')
+}
+
+const loopingFunction = function ( ) {
+    shortPoll(hashtag, sendTweet)
+}
+//Shortpolling vers l'API Twitter toutes les deux secondes
+setInterval(loopingFunction, 2002);

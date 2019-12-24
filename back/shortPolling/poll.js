@@ -7,33 +7,36 @@ const tweeter = require("./tweeter_api");
  * @param {int} lastTweetId - Dernier ID du tweet en base (pour ne récupérer que les tweets plus vieux)
  * @returns {int} id - ID du dernier Tweet associé au hastagh en base, -1 si aucun tweet récupéré
  */
-function poll(hashtag, lastTweetId=0) {
-    tweeter.search(hashtag, lastTweetId, scrapAndInsert);
+function poll(hashtag, lastTweetId, sendTweet) {
+    tweeter.search(hashtag, lastTweetId, scrapAndInsert)
 
+    // Fonction de callback qui va insérer les nouveaux Tweets dans la base de donnée
     function scrapAndInsert(err, data, response) {
-        const formated = (data.statuses.map(function (tweet) {
-            return {
-                "id": tweet.id,
-                "date": toMySQLDate(tweet.created_at),
-                "location": tweet.user.location
-            }
-        }));
-
-        formated.map((tweet) => {tweet.location == '' ? void(0) :
-        db.Tweet.create({
-            tweetId: tweet.id,
-            date: tweet.date,
-            location: tweet.location,
-            hashtag: hashtag
-        })
-        .catch((e) => console.log(e));
-        const id = tweet.id
-        });
-        
-        if (id) {
-            return id
+        if (err) {
+           console.log(err.stack);
         } else {
-            return -1
+            const formated = (data.statuses.map(function (tweet) {
+                return {
+                    "id": tweet.id,
+                    "date": toMySQLDate(tweet.created_at),
+                    "location": tweet.user.location
+                }
+            }));
+
+            formated.map((tweet) => {//if(tweet.location != '') {
+            db.Tweet.create({
+                tweetId: tweet.id,
+                date: tweet.date,
+                location: tweet.location,
+                hashtag: hashtag
+            })
+            .catch(e => {});
+            console.log(tweet.id);
+            sendTweet(tweet.location)
+            //.catch((e) => console.log("Error while inserting :", e));
+            }
+            //}
+            );
         }
     }
 
