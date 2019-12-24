@@ -10,9 +10,10 @@ export class TopbarComponent implements OnInit {
 
   hashtag:string;
   date:string;
+  hour:string;
 
   onLoadDate(){
-    this.socketService.sendDate(this.date)
+    this.socketService.sendDate({date: this.date, hour: this.hour})
     this.socketService.loading = true;
   }
   
@@ -29,6 +30,13 @@ export class TopbarComponent implements OnInit {
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       this.date= yyyy+"-"+mm+"-"+dd;
+
+      var minutes = today.getMinutes();
+      var hour = today.getHours().toString();
+      if (hour.length==1) {
+        hour = 0 + hour;
+      }
+      this.hour = hour+":"+minutes;
   }
 
 }

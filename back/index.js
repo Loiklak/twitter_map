@@ -25,7 +25,7 @@ io.on('connection', function(socket) {
 
     socket.on('fromDate', function(newDate) {
         db.Tweet.findAll({
-            where: { date: { [Op.gte]: moment(newDate).toDate() } },
+            where: { date: { [Op.gte]: moment(newDate.date + ' ' + newDate.hour).toDate() } },
             attributes: ['location'],
             raw: true
         })

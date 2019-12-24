@@ -4,12 +4,24 @@
         TweeterMap
     </span>
     <span class="navbar-brand" *ngIf="hashtag">
-        #{{hashtag}}
+        <h2>#{{hashtag}}</h2>
     </span>
+
     <span *ngIf="socketService.loading">{{date}}</span>
+    <span *ngIf="socketService.loading">{{hour}}</span>
+
     <div style="display: flex; align-items: center;">
-        <span><label style="padding-right:5px;vertical-align: sub" for="date">Ancienneté maximale des tweets :</label></span>
-        <span><input type="date" class="form-control" [(ngModel)]="date" id="date"></span>
-        <span><button class="btn btn-outline-primary my-2 my-sm-0" type="button" (click)="onLoadDate()">Search</button></span>
+        <span>
+            <label style="padding-right:5px;vertical-align: sub" for="date">Ancienneté maximale des tweets :</label>
+        </span>
+        <span>
+            <input type="date" class="form-control" [(ngModel)]="date" id="date">
+        </span>
+        <span>
+            <input type="time" class="form-control" [(ngModel)]="hour">
+        </span>
+        <span>
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="button" (click)="onLoadDate()">Search</button>
+        </span>
     </div>
 </nav>
