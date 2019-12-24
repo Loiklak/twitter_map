@@ -19,6 +19,10 @@ module.exports = {
         "consumer_secret": "",
         "access_token": "",
         "access_token_secret": ""
+    },
+
+    locationIQ: {
+        "token": "b9d92d366db3df"
     }
 };
 ```
