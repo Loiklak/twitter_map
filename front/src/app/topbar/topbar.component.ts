@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-topbar',
@@ -8,11 +9,15 @@ import { Component, OnInit } from '@angular/core';
 export class TopbarComponent implements OnInit {
 
   //Il faudra récupérer le hashtag à la connexion à la socket 
-  hashtag:string = 'Trump';
+  hashtag:string;
 
-  constructor() { }
+  constructor(private socketService: SocketService) {}
 
   ngOnInit() {
+
+    this.socketService
+      .getHashtag()
+      .subscribe(hashtag => this.hashtag = hashtag);
   }
 
 }

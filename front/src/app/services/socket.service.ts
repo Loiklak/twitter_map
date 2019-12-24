@@ -19,4 +19,9 @@ export class SocketService {
       .fromEvent<any>("newTweet")
   }
 
+  getHashtag () {
+    return this.socket
+      .fromEvent<any>("hashtag")
+  }
+
 }

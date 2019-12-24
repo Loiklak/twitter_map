@@ -30,7 +30,7 @@ function check_connection () {
     * @param {function} callback - Fonction qui recevoir en argument les résultats de la recherche (un array)
     */
 function search (hashtag, last_tweet_id=0, callback=(err, data, response)=>console.log(data)) {
-    T.get('search/tweets', { q: `#${hashtag}`, count: 200, since_id: last_tweet_id}, callback)
+    T.get('search/tweets', { q: `#${hashtag}`, count: 2}, callback)
 }
 
 module.exports = { search };

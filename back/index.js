@@ -18,6 +18,7 @@ io.on('connection', function(socket) {
         attributes: ['location'],
         raw: true
     }).then(results => socket.emit('tweetsList', results));
+    socket.emit('hashtag', hashtag);
 })
 
 // io.on('connection', (socket) => socket.emit('tweetsList', ['ok', 'ok', 'supelec est la']))

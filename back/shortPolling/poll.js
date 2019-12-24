@@ -1,5 +1,6 @@
 const db = require("../database");
 const tweeter = require("./tweeter_api");
+const { getLoc } = require('./getCoord');
 
 /**
  * Fonction qui récupére les tweets depuis l'API Twitter et les met en base si ils ont une localisation
@@ -23,25 +24,27 @@ function poll(hashtag, lastTweetId, sendTweet) {
                 }
             }));
 
-            let longitude=0, latitude = 0;
-            formated.map((tweet) => {//if(tweet.location != '') {
-            //On génère des coordinates aléatoires
-            longitude = Math.floor(361*Math.random())-180;
-            latitude = Math.floor(181*Math.random())-90;
-            db.Tweet.create({
-                tweetId: tweet.id,
-                date: tweet.date,
-                //location: tweet.location,
-                location: {type: 'Point', coordinates: [longitude, latitude]},
-                hashtag: hashtag
-            })
-            .catch(e => {});
-            console.log(tweet.id);
-            //.catch((e) => console.log("Error while inserting :", e));
-            //sendTweet(tweet.location);
-            sendTweet({type: 'Point', coordinates: [longitude, latitude]});
+            formated.map((tweet) => {if(tweet.location != '') {
+                getLoc(tweet.location)
+                    .then((response => {
+                        console.log(response.data)
+                        if (!response.data.error) {
+                            coord = [response.data[0].lon, response.data[0].lat]
+                            db.Tweet.create({
+                                tweetId: tweet.id,
+                                date: tweet.date,
+                                location: {type: 'Point', coordinates: coord},
+                                hashtag: hashtag
+                            }).catch(e => console.log(e.data.error))
+                            console.log(tweet.id);
+                            sendTweet({type: 'Point', coordinates: coord});
+                        }
+                }))
+                .catch(e => {
+                    console.log(e);
+                })
             }
-            //}
+            }
             );
         }
     }
