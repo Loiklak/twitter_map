@@ -10,7 +10,7 @@ server = app.listen(5000, () => {
     console.log('Server is on !')
 });
 
-const hashtag = "greve";
+const search_term = "feliz natal";
 
 const io = require('socket.io')(server);
 
@@ -21,7 +21,7 @@ io.on('connection', function(socket) {
         raw: true
     }).then(results => socket.emit('tweetsList', results));
 
-    socket.emit('hashtag', hashtag);
+    socket.emit('search_term', search_term);
 
     socket.on('fromDate', function(newDate) {
         db.Tweet.findAll({
@@ -40,7 +40,7 @@ const sendTweet = function(message) {
 }
 
 const loopingFunction = function ( ) {
-    shortPoll(hashtag, sendTweet)
+    shortPoll(search_term, sendTweet)
 }
 //Shortpolling vers l'API Twitter toutes les 5 secondes
 setInterval(loopingFunction, 5000);

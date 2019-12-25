@@ -21,9 +21,9 @@ export class SocketService {
       .fromEvent<any>("newTweet")
   }
 
-  getHashtag () {
+  getSearchTerm () {
     return this.socket
-      .fromEvent<any>("hashtag")
+      .fromEvent<any>("search_term")
   }
 
   sendDate (newDate) {

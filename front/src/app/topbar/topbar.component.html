@@ -3,8 +3,8 @@
         <img src="https://ressources.blogdumoderateur.com/2019/11/twitter-logo-1200x1200.jpg" width="30" height="30">
         TweeterMap
     </span>
-    <span class="navbar-brand" *ngIf="hashtag">
-        <h2>#{{hashtag}}</h2>
+    <span class="navbar-brand" *ngIf="search_term">
+        <h2>{{search_term}}</h2>
     </span>
 
     <span *ngIf="socketService.loading">{{date}}</span>

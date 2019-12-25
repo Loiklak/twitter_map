@@ -8,7 +8,7 @@ import { SocketService } from '../services/socket.service';
 })
 export class TopbarComponent implements OnInit {
 
-  hashtag:string;
+  search_term:string;
   date:string;
   hour:string;
 
@@ -22,8 +22,8 @@ export class TopbarComponent implements OnInit {
   ngOnInit() {
 
     this.socketService
-      .getHashtag()
-      .subscribe(hashtag => {this.hashtag = hashtag;});
+      .getSearchTerm()
+      .subscribe(search_term => {this.search_term = search_term;});
 
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
@@ -31,10 +31,13 @@ export class TopbarComponent implements OnInit {
       var yyyy = today.getFullYear();
       this.date= yyyy+"-"+mm+"-"+dd;
 
-      var minutes = today.getMinutes();
+      var minutes = today.getMinutes().toString();
       var hour = today.getHours().toString();
       if (hour.length==1) {
         hour = 0 + hour;
+      }
+      if (minutes.length==1) {
+        minutes = 0 + minutes;
       }
       this.hour = hour+":"+minutes;
   }

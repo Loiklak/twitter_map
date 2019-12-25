@@ -4,12 +4,12 @@ const { getLoc } = require('./getCoord');
 
 /**
  * Fonction qui récupére les tweets depuis l'API Twitter et les met en base si ils ont une localisation
- * @param {string} hashtag - Hashtag dont on veut faire la recherche
+ * @param {string} search_term - Terme dont on veut faire la recherche
  * @param {int} lastTweetId - Dernier ID du tweet en base (pour ne récupérer que les tweets plus vieux)
  * @returns {int} id - ID du dernier Tweet associé au hastagh en base, -1 si aucun tweet récupéré
  */
-function poll(hashtag, lastTweetId, sendTweet) {
-    tweeter.search(hashtag, lastTweetId, scrapAndInsert)
+function poll(search_term, lastTweetId, sendTweet) {
+    tweeter.search(search_term, lastTweetId, scrapAndInsert)
 
     // Fonction de callback qui va insérer les nouveaux Tweets dans la base de donnée
     function scrapAndInsert(err, data, response) {
@@ -37,13 +37,13 @@ function poll(hashtag, lastTweetId, sendTweet) {
                                             tweetId: tweet.id,
                                             date: tweet.date,
                                             location: {type: 'Point', coordinates: coord},
-                                            hashtag: hashtag
+                                            hashtag: search_term
                                         })
                                         .catch(e => console.log(e));
                                         sendTweet({type: 'Point', coordinates: coord});
                                     }
                             }))
-                            .catch(e => {console.log(e.data.error)});
+                            .catch(e => {console.log(e.error)});
                         }
                     });
                 
