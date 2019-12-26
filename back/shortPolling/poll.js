@@ -1,15 +1,17 @@
 const db = require("../database");
-const tweeter = require("./tweeter_api");
+const tweeterAPI = require("./tweeter_api");
 const { getLoc } = require('./getCoord');
 
 /**
  * Fonction qui récupére les tweets depuis l'API Twitter et les met en base si ils ont une localisation
  * @param {string} search_term - Terme dont on veut faire la recherche
  * @param {int} lastTweetId - Dernier ID du tweet en base (pour ne récupérer que les tweets plus vieux)
+ * @param {function} sendTweet(object) - Fonction qui envoie au front via websockets l'objet (attendu : un objet GEOMETRY (ie un point sur la carte))
  * @returns {int} id - ID du dernier Tweet associé au hastagh en base, -1 si aucun tweet récupéré
  */
 function poll(search_term, lastTweetId, sendTweet) {
-    tweeter.search(search_term, lastTweetId, scrapAndInsert)
+
+    tweeterAPI.search(search_term, lastTweetId, scrapAndInsert)
 
     // Fonction de callback qui va insérer les nouveaux Tweets dans la base de donnée
     function scrapAndInsert(err, data, response) {
@@ -28,16 +30,16 @@ function poll(search_term, lastTweetId, sendTweet) {
                 //On regarde si le tweet existe déjà en base
                 db.Tweet.count({where: { tweetId: tweet.id } })
                     .then(count => {
-                        if (count===0) { //Si il n'existe pas on essaie de l'ajouter
-                            getLoc(tweet.location)
+                        if (count===0) { // Si il n'existe pas on essaie de l'ajouter
+                            getLoc(tweet.location) // On essaie de trouver les coordonnées du Tweet via l'API LocationIQ
                                 .then((response => {
                                     if (!response.data.error) {
-                                        coord = [response.data[0].lon, response.data[0].lat];
+                                        const coord = [response.data[0].lon, response.data[0].lat];
                                         db.Tweet.create({
                                             tweetId: tweet.id,
                                             date: tweet.date,
                                             location: {type: 'Point', coordinates: coord},
-                                            hashtag: search_term
+                                            searchTerm: search_term
                                         })
                                         .catch(e => console.log(e));
                                         sendTweet({type: 'Point', coordinates: coord});
@@ -51,6 +53,7 @@ function poll(search_term, lastTweetId, sendTweet) {
         }
     }
 
+    // Formate la date Twitter en format DATETIME
     function toMySQLDate(twitDate) {
         const array = twitDate.split(" ");
         return (array[5] + "-" + toMonthNumber(array[1]) + "-" + array[2] + " " + array[3]);
