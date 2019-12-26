@@ -45,7 +45,7 @@ function poll(search_term, lastTweetId, sendTweet) {
                                         sendTweet({type: 'Point', coordinates: coord});
                                     }
                             }))
-                            .catch(e => {console.log(e.error)});
+                            .catch(e => {console.log(e.response.data)});
                         }
                     });
                 
